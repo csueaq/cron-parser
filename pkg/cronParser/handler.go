@@ -9,11 +9,16 @@ type HandlerImp struct {
 }
 
 func (h HandlerImp) ProcessUserInput(input []string) error {
-
-	err := h.checkUserInput(input)
+	var err error
+	var cron Cron
+	err = h.checkUserInput(input)
 
 	if err == nil {
-		h.service.Parse(input[0])
+		cron, err = h.service.ParseInput(input[0])
+
+		if err == nil {
+			err = h.service.Print(cron)
+		}
 	}
 
 	return err

@@ -25,14 +25,11 @@ func (p ParserImp) Parse(min int, max int, item string) (Config, error) {
 			hasConfigDone, err = p.checkValueRange(item, &config)
 
 			if !hasConfigDone && err == nil {
-				hasConfigDone, err = p.checkValueSingle(item, &config)
+				_, err = p.checkValueSingle(item, &config)
 			}
 		}
 	}
 
-	if !hasConfigDone {
-		err = errors.New("unable to parse item")
-	}
 	return config, err
 }
 
@@ -49,7 +46,11 @@ func (p ParserImp) checkStep(item string, config *Config) (bool, error) {
 		var stepStart int
 		stepInterval, err = strconv.Atoi(steps[1])
 		if steps[0] == "*" {
-			stepStart = config.Min
+			if config.Min == 0 {
+				stepStart = config.Min
+			} else {
+				stepStart = stepInterval
+			}
 		} else {
 			stepStart, err = strconv.Atoi(steps[0])
 		}

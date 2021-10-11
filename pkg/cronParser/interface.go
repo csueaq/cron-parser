@@ -5,7 +5,8 @@ type Handler interface {
 }
 
 type Service interface {
-	Parse(cronString string) (Cron, error)
+	ParseInput(cronString string) (Cron, error)
+	Print(cron Cron) error
 }
 
 type Parser interface {

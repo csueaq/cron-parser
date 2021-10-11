@@ -10,3 +10,5 @@ type Config struct {
 	Max    int
 	values []int
 }
+
+const CRON_ITEMS = "minute,hour,day of month,month,day of week"
