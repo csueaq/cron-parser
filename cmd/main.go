@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	parser := cronParser.CreateHandler(cronParser.CreateService())
+	parser := cronParser.CreateHandler(cronParser.CreateService(cronParser.CreateParser()))
 
 	err := parser.ProcessUserInput(os.Args[1:])
 
