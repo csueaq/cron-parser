@@ -1,4 +1,4 @@
-.PHONY=build
+.PHONY=build test
 
 GO111MODULE?=on
 GO_BIN?=app
@@ -6,5 +6,8 @@ GO?=go
 
 .EXPORT_ALL_VARIABLES:
 
-build:
+test:
+	$(GO) test ./... -cover -coverprofile coverage.out
+
+build: test
 	$(GO) build -a -installsuffix nocgo -o $(GO_BIN) cmd/main.go

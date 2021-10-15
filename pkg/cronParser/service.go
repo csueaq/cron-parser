@@ -112,6 +112,7 @@ func (s ServiceImp) ParseInput(cronString string) (Cron, error) {
 		if err == nil {
 			cron.Configs = append(cron.Configs, cfg)
 		} else {
+			err = errors.New(fmt.Sprintf("error parsing %s: %s", v, err.Error()))
 			break
 		}
 

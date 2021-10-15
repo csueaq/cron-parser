@@ -44,6 +44,7 @@ func (p ParserImp) checkStep(item string, config *Config) (bool, error) {
 
 		var stepInterval int
 		var stepStart int
+		var stepEnd int
 		stepInterval, err = strconv.Atoi(steps[1])
 		if steps[0] == "*" {
 			if config.Min == 0 {
@@ -51,12 +52,39 @@ func (p ParserImp) checkStep(item string, config *Config) (bool, error) {
 			} else {
 				stepStart = stepInterval
 			}
+			stepEnd = config.Max
 		} else {
-			stepStart, err = strconv.Atoi(steps[0])
+
+			ranges := strings.Split(steps[0], "-")
+
+			if len(ranges) == 1 {
+				stepStart, err = strconv.Atoi(steps[0])
+				stepEnd = config.Max
+			} else if len(ranges) == 2 {
+				stepStart, err = strconv.Atoi(ranges[0])
+				if err == nil {
+					stepEnd, err = strconv.Atoi(ranges[1])
+				}
+			} else {
+				err = errors.New("invalid range on steps")
+			}
+
+		}
+
+		if stepInterval <= 0 {
+			err = errors.New("not able to use 0 or lower values to step through")
+
+		}
+		if stepStart >= stepEnd {
+			err = errors.New("not able to use range values as they result in 0 loops")
+		}
+
+		if stepEnd-stepStart < stepInterval {
+			err = errors.New("not able to use step values as they result in 0 loops")
 		}
 		if err == nil {
 
-			for i := stepStart; i <= config.Max; i = i + stepInterval {
+			for i := stepStart; i <= stepEnd; i = i + stepInterval {
 				listOfValues = append(listOfValues, i)
 			}
 
