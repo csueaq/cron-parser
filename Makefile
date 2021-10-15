@@ -10,4 +10,4 @@ test:
 	$(GO) test ./... -cover -coverprofile coverage.out
 
 build: test
-	$(GO) build -a -installsuffix nocgo -o $(GO_BIN) cmd/main.go
+	$(GO) build -o $(GO_BIN) cmd/main.go
